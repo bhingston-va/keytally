@@ -8,6 +8,8 @@ from pynput import keyboard
 from collections import Counter
 from colorama import Fore, Style, init as colorama_init
 
+__version__ = "dev"
+
 DATA_FILE = "key_counts.json"
 SAVE_INTERVAL = 5  # seconds
 
@@ -188,6 +190,7 @@ class KeyTally:
 
 def main():
     parser = argparse.ArgumentParser(description="KeyTally - Track and view keyboard usage.")
+    parser.add_argument("--version", "-v", action="store_true", help="Print version")
     subparsers = parser.add_subparsers(dest="command")
 
     subparsers.add_parser("track", help="Start tracking keyboard usage")
@@ -198,6 +201,10 @@ def main():
     stats_parser.add_argument("--heatmap", action="store_true", help="Color keys by usage")
 
     args = parser.parse_args()
+    if args.version:
+        print(f"keytally {__version__}")
+        sys.exit(0)
+
     kt = KeyTally()
 
     if args.command == "track":

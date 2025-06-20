@@ -13,6 +13,7 @@ ENTRYPOINT = keytally.py
 VENV_DIR = venv
 REQ_FILE = requirements.txt
 DIST_DIR = dist
+VERSION = $(shell cat VERSION)
 
 # === DEFAULTS ===
 .PHONY: all
@@ -30,8 +31,10 @@ install: $(VENV_DIR)/bin/activate
 # === BUILD ===
 
 build: install
-	@echo "🏗 Building standalone binary: $(APP_NAME)"
-	$(VENV_DIR)/bin/pyinstaller --onefile --name $(APP_NAME) $(ENTRYPOINT)
+	@echo "🏗 Building standalone binary: $(APP_NAME) version $(VERSION)"
+	sed "s/__version__ = \".*\"/__version__ = \"$(VERSION)\"/" $(ENTRYPOINT) > _tmp.py
+	$(VENV_DIR)/bin/pyinstaller --onefile --name $(APP_NAME) _tmp.py
+	rm _tmp.py
 
 # === RUN ===
 
