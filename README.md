@@ -13,11 +13,32 @@ source venv/bin/activate
 ```bash
 pip install pyinstaller
 ```
+
+## Building the app
+
 ```bash
-pip install -r requirements.txt
+make build
+```
+```bash
+make install-bin
+```
+```bash
+make link-bin
 ```
 
 ## Running the app
+### Tracking keystrokes in the background
 ```bash
-nohup python keytally.py > output.log 2>&1 &
+nohup kt track > output.log 2>&1 &
+```
+
+### Viewing stats
+```bash
+kt stats
+```
+```bash
+kt stats --layout
+```
+```bash
+kt stats --layout --heatmap
 ```
