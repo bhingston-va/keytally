@@ -1,3 +1,4 @@
+import os
 import json
 import threading
 import time
@@ -10,8 +11,16 @@ from colorama import Fore, Style, init as colorama_init
 
 __version__ = "dev"
 
+APP_NAME = "keytally"
 DATA_FILE = "key_counts.json"
 SAVE_INTERVAL = 5  # seconds
+
+def get_stats_path():
+    data_dir = os.path.join(os.path.expanduser("~"), ".local", "share", APP_NAME)
+    os.makedirs(data_dir, exist_ok=True)
+    return os.path.join(data_dir, DATA_FILE)
+
+stats_file = get_stats_path()
 
 def show_stats_layout(key_counts, heatmap=False):
     colorama_init()
@@ -124,7 +133,7 @@ def show_stats_layout(key_counts, heatmap=False):
 
 
 class KeyTally:
-    def __init__(self, data_file=DATA_FILE):
+    def __init__(self, data_file=stats_file):
         self.data_file = data_file
         self.key_counts = {}
         self.lock = threading.Lock()
