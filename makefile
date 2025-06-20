@@ -1,11 +1,16 @@
-# | Command            | What it does                                |
-# | ------------------ | ------------------------------------------- |
-# | `make`             | Set up venv, install deps, build the binary |
-# | `make run`         | Run key tracker via Python in venv          |
-# | `make stats`       | Show CLI stats                              |
-# | `make clean`       | Remove build artifacts                      |
-# | `make purge`       | Remove venv and build artifacts             |
-# | `make install-bin` | Copy compiled binary to `/usr/local/bin/kt` |
+# | Command            | What it does                                          |
+# | ------------------ | ----------------------------------------------------- |
+# | `make`             | Set up venv, install deps, build the binary           |
+# | `make run`         | Run key tracker via Python in venv                    |
+# | `make stats`       | Show CLI stats                                        |
+# | `make install`     | Should install deps in venv                           |
+# | `make build`       | Builds the binary (run in venv; requires pyinstaller) |
+# | `make clean`       | Remove build artifacts                                |
+# | `make purge`       | Remove venv and build artifacts                       |
+# | `make install-bin` | Copy compiled binary to `/usr/local/bin/keytally/kt`  |
+# | `make update-bin`  | Replaces binary to `/usr/local/bin/keytally/kt`       |
+# | `make link-bin`    | Links nested binary so that it can be ran with `kt`   |
+# | `make unlink-bin`  | Removes `kt` symlink                                  |
 
 # === CONFIG ===
 APP_NAME = keytally
@@ -52,6 +57,13 @@ purge: clean
 
 # === INSTALL TO PATH ===
 install-bin:
+	@echo "📦 Installing keytally to $(INSTALL_DIR)"
+	cp -r $(DIST_DIR)/$(APP_NAME) $(INSTALL_PARENT_DIR)/
+	@echo "✓ Installed $(APP_NAME) to $(INSTALL_DIR)"
+
+update-bin:
+	@echo "📦 Removing existing keytally in $(INSTALL_DIR)"
+	rm -rf $(INSTALL_DIR)
 	@echo "📦 Installing keytally to $(INSTALL_DIR)"
 	cp -r $(DIST_DIR)/$(APP_NAME) $(INSTALL_PARENT_DIR)/
 	@echo "✓ Installed $(APP_NAME) to $(INSTALL_DIR)"
