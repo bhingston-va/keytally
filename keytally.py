@@ -57,7 +57,7 @@ def show_stats_layout(key_counts, heatmap=False):
         elif ratio > 0:
             return Fore.GREEN
         else:
-            return Fore.BLUE
+            return Style.RESET_ALL
 
     def normalize_key(k):
         return {
@@ -86,7 +86,7 @@ def show_stats_layout(key_counts, heatmap=False):
         pad = width - len(label)
         left = pad // 2
         right = pad - left
-        return f"{color}│{' ' * left}{label}{' ' * right}{Style.RESET_ALL}"
+        return f"│{color}{' ' * left}{label}{' ' * right}{Style.RESET_ALL}"
 
     def print_row(row):
         widths = [int(round(4 * key_widths.get(k, 1))) for k in row]
