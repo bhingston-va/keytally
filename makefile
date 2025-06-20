@@ -8,36 +8,35 @@
 # | `make install-bin` | Copy compiled binary to `/usr/local/bin/kt` |
 
 # === CONFIG ===
-APP_NAME = kt        # final binary name
+APP_NAME = keytally
 ENTRYPOINT = keytally.py
 VENV_DIR = venv
 REQ_FILE = requirements.txt
 DIST_DIR = dist
+INSTALL_PARENT_DIR = /usr/local/bin
+INSTALL_DIR = /usr/local/bin/keytally
 VERSION = $(shell cat VERSION)
+LINK_PATH = /usr/local/bin/kt
 
 # === DEFAULTS ===
 .PHONY: all
 all: build
 
 # === SETUP ===
-
-$(VENV_DIR)/bin/activate:
+install:
 	python3.12 -m venv $(VENV_DIR)
+	$(VENV_DIR)/bin/pip install pyinstaller
 	$(VENV_DIR)/bin/pip install -r $(REQ_FILE)
-
-install: $(VENV_DIR)/bin/activate
 	@echo "✓ Virtualenv set up with dependencies."
 
 # === BUILD ===
-
 build: install
 	@echo "🏗 Building standalone binary: $(APP_NAME) version $(VERSION)"
 	sed "s/__version__ = \".*\"/__version__ = \"$(VERSION)\"/" $(ENTRYPOINT) > _tmp.py
-	$(VENV_DIR)/bin/pyinstaller --onefile --name $(APP_NAME) _tmp.py
+	$(VENV_DIR)/bin/pyinstaller --onedir --name $(APP_NAME) _tmp.py
 	rm _tmp.py
 
 # === RUN ===
-
 run:
 	$(VENV_DIR)/bin/python $(ENTRYPOINT) track
 
@@ -45,7 +44,6 @@ stats:
 	$(VENV_DIR)/bin/python $(ENTRYPOINT) stats
 
 # === CLEANUP ===
-
 clean:
 	rm -rf build $(DIST_DIR) *.spec __pycache__ .pytest_cache
 
@@ -53,8 +51,17 @@ purge: clean
 	rm -rf $(VENV_DIR)
 
 # === INSTALL TO PATH ===
-
 install-bin:
-	cp $(DIST_DIR)/$(APP_NAME) /usr/local/bin/$(APP_NAME)
-	@echo "✓ Installed $(APP_NAME) to /usr/local/bin"
+	@echo "📦 Installing keytally to $(INSTALL_DIR)"
+	cp -r $(DIST_DIR)/$(APP_NAME) $(INSTALL_PARENT_DIR)/
+	@echo "✓ Installed $(APP_NAME) to $(INSTALL_DIR)"
 
+# === SYMLINK FOR GLOBAL USAGE ===
+link-bin:
+	@echo "🔗 Creating symlink at $(LINK_PATH)"
+	ln -sf $(INSTALL_DIR)/$(APP_NAME) $(LINK_PATH)
+	@echo "✓ Now you can run 'kt' from anywhere."
+
+unlink-bin:
+	@echo "🧹 Removing symlink at $(LINK_PATH)"
+	rm -f $(LINK_PATH)
