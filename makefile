@@ -1,3 +1,12 @@
+# | Command            | What it does                                |
+# | ------------------ | ------------------------------------------- |
+# | `make`             | Set up venv, install deps, build the binary |
+# | `make run`         | Run key tracker via Python in venv          |
+# | `make stats`       | Show CLI stats                              |
+# | `make clean`       | Remove build artifacts                      |
+# | `make purge`       | Remove venv and build artifacts             |
+# | `make install-bin` | Copy compiled binary to `/usr/local/bin/kt` |
+
 # === CONFIG ===
 APP_NAME = kt        # final binary name
 ENTRYPOINT = keytally.py
