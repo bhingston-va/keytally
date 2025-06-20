@@ -12,7 +12,7 @@ all: build
 # === SETUP ===
 
 $(VENV_DIR)/bin/activate:
-	python3 -m venv $(VENV_DIR)
+	python3.12 -m venv $(VENV_DIR)
 	$(VENV_DIR)/bin/pip install -r $(REQ_FILE)
 
 install: $(VENV_DIR)/bin/activate
