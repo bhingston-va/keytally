@@ -73,11 +73,11 @@ def show_stats_layout(key_counts, heatmap=False):
     def normalize_key(k):
         return {
             'space': 'Key.space',
-            'ctrl': 'Key.ctrl_l',
-            'lctrl': 'Key.ctrl_l',
+            'ctrl': 'Key.ctrl',
+            'lctrl': 'Key.ctrl',
             'rctrl': 'Key.ctrl_r',
-            'alt': 'Key.alt_l',
-            'lalt': 'Key.alt_l',
+            'alt': 'Key.alt',
+            'lalt': 'Key.alt',
             'ralt': 'Key.alt_r',
             'cmd': 'Key.cmd',
             'lcmd': 'Key.cmd',

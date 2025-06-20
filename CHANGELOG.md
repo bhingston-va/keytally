@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.1.2 - 2025-06-20
+- Fix stats layout display for left ctrl and left alt keys
+
 ## v0.1.1 - 2025-06-20
 - Fix where we store stats file
   - No longer depends on where the script is run from
