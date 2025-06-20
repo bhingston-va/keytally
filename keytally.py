@@ -21,6 +21,28 @@ def show_stats_layout(key_counts, heatmap=False):
         ['LShift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', 'RShift'],
         ['Fn1', 'LAlt', 'LCmd', 'Space', 'RAlt', '`', 'Fn2', 'Fn1'],
     ]
+    label_map = {
+        'Backspace': '←',
+        'LAlt': '⎇',
+        'LCmd': '⌘',
+        'Esc': '⎋',
+    }
+    key_widths = {
+        'Backspace': 2,
+        'Tab': 1.5,
+        '\\': 1.5,
+        'LCtrl': 1.8,
+        'Enter': 2.4,
+        'LShift': 2.4,
+        'RShift': 3,
+        'Fn1': 1.35,
+        'LAlt': 1.35,
+        'LCmd': 1.35,
+        'RAlt': 1.35,
+        'Space': 7.75,
+        '`': 1.35,
+        'Fn2': 1.35,
+    }
 
     max_val = max(key_counts.values()) if key_counts else 1
 
@@ -35,11 +57,10 @@ def show_stats_layout(key_counts, heatmap=False):
         elif ratio > 0:
             return Fore.GREEN
         else:
-            return Fore.BLACK
+            return Fore.BLUE
 
     def normalize_key(k):
-        # Match layout labels to pynput keys
-        lookup = {
+        return {
             'space': 'Key.space',
             'ctrl': 'Key.ctrl_l',
             'lctrl': 'Key.ctrl_l',
@@ -59,26 +80,37 @@ def show_stats_layout(key_counts, heatmap=False):
             'backspace': 'Key.backspace',
             'fn1': 'Fn1',
             'fn2': 'Fn2',
-        }
-        return lookup.get(k.lower(), k.lower())
+        }.get(k.lower(), k.lower())
 
-    def format_key(k, top=True):
-        key_id = normalize_key(k)
-        count = key_counts.get(key_id, 0)
-        label = k if top else str(count)
-        color = color_for_freq(count)
-        width = max(6, len(k) + 2)  # accommodate wide keys like "Backspace"
+    def cell_content(label, width, color):
         pad = width - len(label)
         left = pad // 2
         right = pad - left
         return f"{color}│{' ' * left}{label}{' ' * right}{Style.RESET_ALL}"
 
     def print_row(row):
-        widths = [max(6, len(k) + 2) for k in row]
+        widths = [int(round(4 * key_widths.get(k, 1))) for k in row]
+
         top = "┌" + "┬".join("─" * w for w in widths) + "┐"
-        mid = "".join(format_key(k, top=True) for k in row) + "│"
-        num = "".join(format_key(k, top=False) for k in row) + "│"
+
+        labels = []
+        for k, w in zip(row, widths):
+            label = label_map.get(k, k)
+            key_id = normalize_key(k)
+            color = color_for_freq(key_counts.get(key_id, 0))
+            labels.append(cell_content(label, w, color))
+        mid = "".join(labels) + "│"
+
+        counts = []
+        for k, w in zip(row, widths):
+            key_id = normalize_key(k)
+            count_str = str(key_counts.get(key_id, 0))
+            color = color_for_freq(key_counts.get(key_id, 0))
+            counts.append(cell_content(count_str, w, color))
+        num = "".join(counts) + "│"
+
         bot = "└" + "┴".join("─" * w for w in widths) + "┘"
+
         print(top)
         print(mid)
         print(num)
