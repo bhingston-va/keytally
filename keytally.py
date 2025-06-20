@@ -93,6 +93,53 @@ def show_stats_layout(key_counts, heatmap=False):
             'fn2': 'Fn2',
         }.get(k.lower(), k.lower())
 
+    def shifted_symbol(k):
+        shift_map = {
+            '/': '?',
+            '?': '/',
+            '.': '>',
+            '>': '.',
+            ',': '<',
+            '<': ',',
+            ';': ':',
+            ':': ';',
+            "'": '"',
+            '"': "'",
+            '[': '{',
+            '{': '[',
+            ']': '}',
+            '}': ']',
+            '\\': '|',
+            '|': '\\',
+            '`': '~',
+            '~': '`',
+            '-': '_',
+            '_': '-',
+            '=': '+',
+            '+': '=',
+            '1': '!',
+            '!': '1',
+            '2': '@',
+            '@': '2',
+            '3': '#',
+            '#': '3',
+            '4': '$',
+            '$': '4',
+            '5': '%',
+            '%': '5',
+            '6': '^',
+            '^': '6',
+            '7': '&',
+            '&': '7',
+            '8': '*',
+            '*': '8',
+            '9': '(',
+            '(': '9',
+            '0': ')',
+            ')': '0',
+        }
+        return shift_map.get(k, '')
+
     def cell_content(label, width, color):
         pad = width - len(label)
         left = pad // 2
@@ -115,7 +162,11 @@ def show_stats_layout(key_counts, heatmap=False):
         counts = []
         for k, w in zip(row, widths):
             key_id = normalize_key(k)
-            count_str = str(key_counts.get(key_id, 0))
+            count_str = str(
+                key_counts.get(key_id, 0)
+                + key_counts.get(k.upper(), 0)
+                + key_counts.get(shifted_symbol(k), 0)
+            )
             color = color_for_freq(key_counts.get(key_id, 0))
             counts.append(cell_content(count_str, w, color))
         num = "".join(counts) + "│"

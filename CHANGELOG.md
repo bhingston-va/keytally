@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.2.0 - 2025-06-20
+- Count both keys in stats layout (with Shift) and without (without Shift)
+
 ## v0.1.2 - 2025-06-20
 - Fix stats layout display for left ctrl and left alt keys
 
