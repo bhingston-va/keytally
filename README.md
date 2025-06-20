@@ -36,9 +36,14 @@ nohup kt track > output.log 2>&1 &
 ```bash
 kt stats
 ```
+<img width="220" alt="Screenshot 2025-06-20 at 3 52 23 AM" src="https://github.com/user-attachments/assets/7f8d5d83-38c5-493b-868b-227c9c27a2c7" />
+
 ```bash
 kt stats --layout
 ```
+<img width="632" alt="Screenshot 2025-06-20 at 3 52 41 AM" src="https://github.com/user-attachments/assets/2224ddb2-3fb0-4e94-be34-a6cde9ed60e5" />
+
 ```bash
 kt stats --layout --heatmap
 ```
+<img width="632" alt="Screenshot 2025-06-20 at 3 52 56 AM" src="https://github.com/user-attachments/assets/e48c4f66-8026-447f-b172-e179ca133ece" />
